@@ -9,7 +9,10 @@ pipeline{
     stages{
         stage("cloaning"){
             steps{
-             git "https://github.com/yerrabandireddy/terraform1.git"
+                             checkout([$class: 'GitSCM', 				
+				branches: [[name: "origin/master"]], 
+				userRemoteConfigs: [[
+                url:   "https://github.com/yerrabandireddy/terraform1.git"']]])
             }
         }
         stage("terraforn plan"){
