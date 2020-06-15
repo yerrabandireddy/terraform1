@@ -1,2 +1,4 @@
-yum install wget
-update wgwt
+#!/bin/bash
+yum update -y
+yum upgrade -y
+yum install httpd -y
