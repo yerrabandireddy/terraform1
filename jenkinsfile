@@ -7,10 +7,7 @@ pipeline {
     stages {
         stage ('Cloning Script') {
             steps {
-                checkout([$class: 'GitSCM', 				
-				branches: [[name: "origin/master"]], 
-				userRemoteConfigs: [[
-                url: 'https://github.com/yerrabandireddy/terraform1']]])
+               url: 'https://github.com/yerrabandireddy/terraform1'
             }
         }
         stage('TF Plan') {
