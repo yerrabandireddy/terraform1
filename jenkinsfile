@@ -1,58 +1,57 @@
-pipeline{
-    agent{
-        label "java"
+pipeline {
+    agent any
+    parameters {
+        choice(name: 'action', choices: 'create\ndestroy', description: 'Create/update or destroy the apache-server')
+        string(name: 'workspace', description: "Name of the workspace")
     }
-    parameters{
-        choice(name: "create", choices: "create\ndestroy",description: "create or destroy the server")
-        string(name: "workspace", description: "name of work space")
-    }
-    stages{
-        stage("cloaning"){
-            steps{
-                             checkout([$class: 'GitSCM', 				
+    stages {
+        stage ('Cloning Script') {
+            steps {
+                checkout([$class: 'GitSCM', 				
 				branches: [[name: "origin/master"]], 
-				userRemoteConfigs: [[url:'''https://github.com/yerrabandireddy/terraform1.git''']]])
+				userRemoteConfigs: [[
+                url: 'https://github.com/kaza514/terr.git']]])
             }
         }
-        stage("terraforn plan"){
+        stage('TF Plan') {
             when {
-                expression {params.action == "create"}
+                expression { params.action == 'create' }
             }
-            steps{
-                script{
-                    sh '''
-                    terraform init
-                    terraform workspace new ${params.workspace} || true
-                    terraform workspace select ${params.workspace}
-                    terraform plan
-                    '''
-                }   
-            }
-        }
-        stage("terraform plan"){
-            when{
-                expression {params.action == "create"}
-            }
-            steps{
-                script{
-                    sh '''
-                    terraform apply -input=false -auto-approve
-                    '''
+            steps {
+                script {
+                        sh """
+                        terraform init
+                        terraform workspace new ${params.workspace} || true
+                        terraform workspace select ${params.workspace}
+                        terraform plan
+                        """
+                    }
                 }
-            }
         }
-        stage("terraform destroy"){
-            when{
-                expression {params.action == "destroy"}
-            }
-            steps{
-                script{
-                    sh '''
-                    terraform workspace select ${params.workspace}
-                    terraform destroy -auto-approve
-                    '''
+        stage('TF Apply') {
+          when {
+            expression { params.action == 'create' }
+          }
+          steps {
+            script {
+                        sh """ 
+                        terraform apply -input=false -auto-approve
+                        """
+                    }
                 }
-            }
         }
-    }
+        stage('TF Destroy') {
+          when {
+            expression { params.action == 'destroy' }
+          }
+          steps {
+            script {
+                        sh """ 
+                        terraform workspace select ${params.workspace}
+                        terraform destroy -auto-approve
+                        """
+                    }
+                }
+        }
+    }        
 }
