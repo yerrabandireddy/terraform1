@@ -1,7 +1,5 @@
 pipeline{
-    agent{
-        label "java"
-    }
+    agent any
     parameters{
         choice(name: "create", choices: "create\ndestroy",description: "create or destroy the server")
         string(name: "workspace", description: "name of work space")
