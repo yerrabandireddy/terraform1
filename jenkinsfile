@@ -12,7 +12,7 @@ pipeline{
 				userRemoteConfigs: [[url:'''https://github.com/yerrabandireddy/terraform1.git''']]])
             }
         }
-        stage("terraforn plan"){
+        stage("terraforn initializing"){
             when {
                 expression {params.action == "create"}
             }
