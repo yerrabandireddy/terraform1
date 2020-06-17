@@ -1,7 +1,7 @@
 pipeline{
     agent any
     parameters{
-        choice(name: "create", choices: "create\ndestroy",description: "create or destroy the server")
+        choice(name: "action", choices: "create\ndestroy",description: "create or destroy the server")
         string(name: "workspace", description: "name of work space")
     }
     stages{
