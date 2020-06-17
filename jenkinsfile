@@ -18,14 +18,14 @@ pipeline{
             }
             steps{
                 script{
-                    sh '''
+                    sh """
                     terraform init
                     ls -l
                     sleep 10s
                     terraform workspace new ${params.workspace} || true
                     terraform workspace select ${params.workspace}
                     terraform plan
-                    '''
+                    """
                 }   
             }
         }
@@ -35,9 +35,9 @@ pipeline{
             }
             steps{
                 script{
-                    sh '''
+                    sh """
                     terraform apply -input=false -auto-approve
-                    '''
+                    """
                 }
             }
         }
@@ -47,10 +47,10 @@ pipeline{
             }
             steps{
                 script{
-                    sh '''
+                    sh """
                     terraform workspace select ${params.workspace}
                     terraform destroy -auto-approve
-                    '''
+                    """
                 }
             }
         }
